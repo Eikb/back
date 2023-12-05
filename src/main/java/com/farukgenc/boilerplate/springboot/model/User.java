@@ -43,6 +43,8 @@ public class User {
 	private List<Duty> duties;
 	private Boolean duty;
 
+	private Double credit;
+
 
 
 
