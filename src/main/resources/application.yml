@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_DB_SERVER_ADDRESS:localhost}:${POSTGRES_DB_SERVER_PORT:5432}/
+    username: ${POSTGRES_USER:postgres}
+  jackson:
+    date-format: "dd-MM-yyyy HH:mm"
+
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+      format-sql: true
+      type: info
+      use-sql-comments: true
+      properties:
+        hibernate.use_sql_comments: true
+        hibernate.format_sql: true
+
+springdoc:
+  show-actuator: true
+  paths-to-match: /**
+  packages-to-scan: com.farukgenc.boilerplate.springboot
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+
+logging:
+  level:
+    org.springframework: INFO
+    com.farukgenc.boilerplate.springboot: INFO
+
+
+## FIXME : Customize JWT token and Swagger information for your application
+
+jwt:
+  secretKey: secret
+  issuer: enes ilkbay
+  expirationMinute: 900
+
+swagger:
+  contact-name: Enes Ilkbay
+  contact-mail: enes.ilkbay@gmail.com
+  app-name: Silivri Tekamül Santral
+  app-version: 1.0.0
+  app-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+  app-license: Apache 2.0

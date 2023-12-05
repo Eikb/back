@@ -1,0 +1,1 @@
+package com.farukgenc.boilerplate.springboot.model.dailyprogram;
