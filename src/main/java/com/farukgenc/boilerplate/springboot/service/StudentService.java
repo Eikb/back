@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.service;
 
+import com.farukgenc.boilerplate.springboot.dto.StudentDto;
 import com.farukgenc.boilerplate.springboot.model.enterExit.Entry;
 import com.farukgenc.boilerplate.springboot.model.enterExit.Student;
 import com.farukgenc.boilerplate.springboot.repository.StudentRepository;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final EntryService entryService;
 
     public String createStudent(Student student) {
         try {
@@ -27,7 +30,10 @@ public class StudentService {
 
     public List<Student> getAllStudents(){
         try {
-            return studentRepository.findAll();
+            return studentRepository.findAll().stream().map((e) -> {
+                e.setHolidays(entryService.getAllEntriesOfOneStudent(e.getId()));
+                return e;
+            }).collect(Collectors.toList());
         } catch (Exception e){
             return Collections.emptyList();
         }

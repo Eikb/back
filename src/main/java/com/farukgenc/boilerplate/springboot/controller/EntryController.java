@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.model.User;
 import com.farukgenc.boilerplate.springboot.model.enterExit.Entry;
 import com.farukgenc.boilerplate.springboot.model.enterExit.Student;
 import com.farukgenc.boilerplate.springboot.repository.DutyRepository;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -51,6 +54,9 @@ public class EntryController {
         LocalDateTime dayInDateTimeFormat = LocalDateTime.parse(day, formatter);
         entry.setExit(dayInDateTimeFormat);
         entry.setDutyId(dutyRepository.findByActive(true).getId());
+        Student student = studentRepository.findByName(entry.getStudentName());
+
+
         return ResponseEntity.ok(entryService.createEntry(entry));
     }
 
@@ -59,15 +65,24 @@ public class EntryController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalDateTime dayInDateTimeFormat = LocalDateTime.parse(day, formatter);
 
+        AtomicInteger error = new AtomicInteger();
         entries.stream().map(e -> {
             Student student = studentRepository.findByName(e.getStudentName());
             e.setExit(dayInDateTimeFormat);
-            e.setDutyId(dutyRepository.findByActive(true).getId());
-            studentRepository.updateInBuildingById(false,student.getId());
-            entryService.createEntry(e);
+            if(dutyRepository.findByActive(true) == null){
+               error.getAndIncrement();
+            }else {
+                e.setDutyId(dutyRepository.findByActive(true).getId());
+                studentRepository.updateInBuildingById(false,student.getId());
+                entryService.createEntry(e);
+            }
+
             return "f";
         }).collect(Collectors.toList());
 
+        if(error.get() > 0){
+            return ResponseEntity.status(300).body("Aktif Nöbet bulunamadi. Önce Nöbete Giris yapiniz");
+        }
         return ResponseEntity.ok("List Kayit edildi");
     }
 
@@ -100,4 +115,9 @@ public class EntryController {
         return ResponseEntity.ok(entryService.deleteEnter(id));
     }
 
+    @GetMapping("/statistics/rounds/{reason}")
+    public ResponseEntity<Map<String, Long>> getRoundStatistics(@PathVariable String reason) {
+        Map<String, Long> roundStatistics = entryService.generateRoundStatistics(reason);
+        return ResponseEntity.ok(roundStatistics);
+    }
 }

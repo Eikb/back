@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -65,4 +66,21 @@ public class EntryService {
             return "Silinemedi: " + e.getMessage();
         }
     }
+
+    public Map<String, Long> generateRoundStatistics(String statisticReason) {
+        List<Entry> entries = entryRepository.findAll();
+
+        return entries.stream()
+                .filter(entry -> statisticReason.toLowerCase().equals(entry.getReason().toLowerCase())) // Filtern nach dem Grund "Rund rausgegangen"
+                .collect(Collectors.groupingBy(Entry::getStudentName, Collectors.counting()));
+    }
+
+    public List<Entry> getAllEntriesOfOneStudent(Long studentId){
+       return entryRepository.findAll().stream().filter((e) -> {
+            studentRepository.findById(studentId);
+           return Objects.equals(e.getStudentName(), studentRepository.findById(studentId).get().getName());
+       }).collect(Collectors.toList());
+    }
+
+
 }
