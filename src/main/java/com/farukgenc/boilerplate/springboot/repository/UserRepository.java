@@ -2,6 +2,7 @@ package com.farukgenc.boilerplate.springboot.repository;
 
 import com.farukgenc.boilerplate.springboot.model.Duty;
 import com.farukgenc.boilerplate.springboot.model.User;
+import com.farukgenc.boilerplate.springboot.model.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,11 @@ import java.util.List;
  * @author Faruk
  */
 public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findByUserRole(UserRole userRole);
+    @Transactional
+    @Modifying
+    @Query("update User u set u.pushToken = ?1 where u.id = ?2")
+    int updatePushTokenById(String pushToken, Long id);
     @Transactional
     @Modifying
     @Query("update User u set u.dutyEndTime = ?1 where u.id = ?2")

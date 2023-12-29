@@ -1,6 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
-import com.farukgenc.boilerplate.springboot.model.User;
+import com.farukgenc.boilerplate.springboot.model.PushObject;
 import com.farukgenc.boilerplate.springboot.model.enterExit.Entry;
 import com.farukgenc.boilerplate.springboot.model.enterExit.Student;
 import com.farukgenc.boilerplate.springboot.repository.DutyRepository;
@@ -10,6 +10,7 @@ import com.farukgenc.boilerplate.springboot.repository.UserRepository;
 import com.farukgenc.boilerplate.springboot.service.EntryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,7 @@ public class EntryController {
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
     private final EntryRepository entryRepository;
+
 
     public EntryController(EntryService entryService,
                            DutyRepository dutyRepository,
@@ -64,6 +66,13 @@ public class EntryController {
     public ResponseEntity<String> createCollectionOfEntries(@RequestBody List<Entry> entries, @PathVariable String day){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalDateTime dayInDateTimeFormat = LocalDateTime.parse(day, formatter);
+
+        PushObject pushObject = new PushObject();
+        String externalAppUrl = "https://exp.host/--/api/v2/push/send";
+
+
+        // Führe den externen App-Aufruf durch
+
 
         AtomicInteger error = new AtomicInteger();
         entries.stream().map(e -> {

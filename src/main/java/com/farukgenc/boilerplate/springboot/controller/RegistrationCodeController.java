@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
+import com.farukgenc.boilerplate.springboot.model.UserRole;
 import com.farukgenc.boilerplate.springboot.service.RegistrationCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,14 @@ public class RegistrationCodeController {
         }
     }
 
-    @PostMapping("/{firstname}/{lastname}")
-    public ResponseEntity<Object> createCode(@PathVariable String firstname, @PathVariable String lastname){
-       return ResponseEntity.ok(registrationCodeService.createCode(firstname, lastname));
+    @PostMapping("/{firstname}/{lastname}/{code}")
+    public ResponseEntity<Object> createCode(@PathVariable String firstname, @PathVariable String lastname, @PathVariable String code){
+        UserRole userRole;
+        userRole = UserRole.USER;
+        if (code.toUpperCase().equals("PERSONEL")){
+            userRole = UserRole.PERSONEL;
+        }
+       return ResponseEntity.ok(registrationCodeService.createCode(firstname, lastname, userRole ));
     }
 
     @PostMapping("/{username}")

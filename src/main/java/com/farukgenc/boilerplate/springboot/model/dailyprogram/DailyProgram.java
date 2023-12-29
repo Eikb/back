@@ -3,6 +3,9 @@ package com.farukgenc.boilerplate.springboot.model.dailyprogram;
 import lombok.*;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,12 +19,12 @@ public class DailyProgram {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String program;
+    private String courseId;
 
-    private Boolean active;
-
-    private String time;
-
+    private Integer day;
+    private String startTime;
+    private String endTime;
+    private String color;
 
 
 }

@@ -1,6 +1,7 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.User;
+import com.farukgenc.boilerplate.springboot.model.UserRole;
 import com.farukgenc.boilerplate.springboot.repository.UserRepository;
 import com.farukgenc.boilerplate.springboot.security.jwt.JwtTokenManager;
 import com.farukgenc.boilerplate.springboot.service.UserService;
@@ -71,6 +72,20 @@ public class UserController {
         }
         userService.setDuty(userId, duty, secondUserId);
         return ResponseEntity.ok("Degisti");
+    }
+
+    @PostMapping("/token/{pushToken}")
+    public ResponseEntity<String> addPushToken(@PathVariable String pushToken, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+        try {
+            userRepository.updatePushTokenById(pushToken, userRepository.findByUsername(jwtTokenManager.getUsernameFromToken(jwtTokenManager.getUsernameFromToken(token.split(" ")[1]))).getId());
+            return ResponseEntity.ok("Push Token eklendi");
+        }catch (Exception e){
+            return ResponseEntity.ok("Hata Olustu: + " + e.getMessage());
+        }
+    }
+    @GetMapping("/personel")
+    public ResponseEntity <List<User>> getAllPersonel(){
+        return ResponseEntity.ok(userRepository.findByUserRole(UserRole.PERSONEL));
     }
 
 

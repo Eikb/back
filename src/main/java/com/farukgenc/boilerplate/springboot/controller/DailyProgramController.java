@@ -1,6 +1,7 @@
 package com.farukgenc.boilerplate.springboot.controller;
 
 import com.farukgenc.boilerplate.springboot.model.dailyprogram.DailyProgram;
+import com.farukgenc.boilerplate.springboot.model.dailyprogram.DailyProgramDto;
 import com.farukgenc.boilerplate.springboot.service.ProgramService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,18 @@ public class DailyProgramController {
 
     @PostMapping("/program/create")
     public ResponseEntity<String> createProgram(@RequestBody DailyProgram dailyProgram){
-        dailyProgram.setActive(false);
         return ResponseEntity.ok(programService.createProgram(dailyProgram));
     }
 
+    @PostMapping("/program/create/list")
+    public ResponseEntity<String> createProgramList(@RequestBody DailyProgramDto dailyProgramDto){
+
+        return ResponseEntity.ok(programService.createProgramList(dailyProgramDto.getDailyProgram(), dailyProgramDto.getDays()));
+    }
+
+
     @PostMapping("/program/{programId}")
-    public ResponseEntity<String> updateEmployee(@PathVariable Long programId, @RequestBody DailyProgram dailyProgram){
+    public ResponseEntity<String> updateProgram(@PathVariable Long programId, @RequestBody DailyProgram dailyProgram){
         return ResponseEntity.ok(programService.updateProgram(programId, dailyProgram));
     }
 

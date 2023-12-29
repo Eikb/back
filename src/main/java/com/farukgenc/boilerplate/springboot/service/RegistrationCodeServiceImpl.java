@@ -1,6 +1,7 @@
 package com.farukgenc.boilerplate.springboot.service;
 
 import com.farukgenc.boilerplate.springboot.model.RegistrationCode;
+import com.farukgenc.boilerplate.springboot.model.UserRole;
 import com.farukgenc.boilerplate.springboot.repository.RegistrationCodeRepository;
 import com.farukgenc.boilerplate.springboot.repository.UserRepository;
 import com.farukgenc.boilerplate.springboot.security.dto.RegistrationRequest;
@@ -35,7 +36,7 @@ public class RegistrationCodeServiceImpl implements RegistrationCodeService{
 
     //Hier wird der Code erzeugt Der Code ist eine Reheinfolge von 4 Zufälligen Zahlen
     @Override
-    public Object createCode(String firstname, String lastname) {
+    public Object createCode(String firstname, String lastname, UserRole userRole) {
         try {
             //Code erstellen
             Random random = new Random();
@@ -53,6 +54,7 @@ public class RegistrationCodeServiceImpl implements RegistrationCodeService{
             registrationCode.setName(firstname + " " + lastname);
             registrationCode.setUsername(username.toLowerCase());
             registrationCode.setCode(randomFourDigitNumber);
+            registrationCode.setUserRole(userRole);
 
             registrationCodeRepository.save(registrationCode);
 

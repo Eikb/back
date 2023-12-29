@@ -13,8 +13,8 @@ import java.util.List;
 public interface ProgramRepository extends JpaRepository<DailyProgram, Long> {
     @Transactional
     @Modifying
-    @Query("update DailyProgram d set d.program = ?1, d.time = ?2 where d.id = ?3")
-    int updateProgramAndTimeById(String program, String time, Long id);
-    List<DailyProgram> findAllByOrderByTime();
+    @Query("update DailyProgram d set d.courseId = ?1, d.day = ?2, d.startTime = ?3, d.endTime = ?4, d.color = ?5 " +
+            "where d.id = ?6")
+    void updateCourseIdAndDayAndStartTimeAndEndTimeAndColorById(String courseId, Integer day, String startTime, String endTime, String color, Long id);
 
 }

@@ -1,5 +1,6 @@
 package com.farukgenc.boilerplate.springboot.security.dto;
 
+import com.farukgenc.boilerplate.springboot.model.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,4 +33,6 @@ public class RegistrationRequest {
 	@NotEmpty(message = "{registration_password_not_empty}")
 	private String password;
 
+	@NotEmpty(message = "Rolle darf nicht leer sein")
+	private String role;
 }

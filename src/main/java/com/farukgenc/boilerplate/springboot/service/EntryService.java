@@ -43,7 +43,6 @@ public class EntryService {
             return "Kayit edilidi";
         }catch (Exception e){
             return "Hata olusud" + e.getMessage();
-
         }
     }
     public String editEnter(LocalDateTime dateTime, Long id){
